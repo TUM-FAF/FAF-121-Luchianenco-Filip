@@ -1,6 +1,6 @@
-# Windows Programming Laboratories Repository
+## Windows Programming Laboratories Repository
 
-## Personal Information
+### Personal Information
 
 **Student:** Luchianenco Filip
 
