@@ -81,8 +81,23 @@
 <li><a href="http://stackoverflow.com/">http://stackoverflow.com/</a></li>
 <li><a href="http://blog.mpshouse.com/">http://blog.mpshouse.com/</a></li>
 </ul><h3>
-<a name="legal-compliance" class="anchor" href="#legal-compliance"><span class="octicon octicon-link"></span></a>Legal compliance</h3>
 
+
+<h4>
+<a name="Compiling" class="anchor" href="#compiling"><span class="octicon octicon-link"></span></a>Compiling The Project</h4>
+<p>The Program can be compiled by executing the following commands in terminal: &nbsp; </p>
+
+
+    g++ mywindow.cpp mywindow.h main.cpp -o lab1 `pkg-config gtkmm-3.0 --cflags --libs`
+    ./lab1 
+
+
+
+
+
+----------------------------------------------  End Of File -----------------------------------------------
+
+<a name="legal-compliance" class="anchor" href="#legal-compliance"><span class="octicon octicon-link"></span></a>Legal compliance</h3>
 <p>Copyright (c) 2014, LuchFilip
 All rights reserved.</p>
 
