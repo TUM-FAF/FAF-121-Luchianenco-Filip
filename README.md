@@ -6,4 +6,5 @@
 
 **Group:** FAF-121
 
-**GitHub nickname:** luchfilip
+**GitHub nickname:** [luchfilip](https://github.com/luchfilip)
+
