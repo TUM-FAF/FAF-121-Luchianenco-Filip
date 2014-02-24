@@ -1,4 +1,3 @@
-
   <div id="readme" class="blob instapaper_body">
     <article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1>
 <a name="laboratory-1-login-application" class="anchor" href="#laboratory-1-login-application"><span class="octicon octicon-link"></span></a>Laboratory #1: Login Application</h1>
@@ -24,7 +23,7 @@
 </li>
 <li>
 <b>Added 2 text elements to window:</b> 
-
+** THIs 
 <ul>
 <li>default styles</li>
 <li>added hint(markup)</li>
