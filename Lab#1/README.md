@@ -23,7 +23,6 @@
 </li>
 <li>
 <b>Added 2 text elements to window:</b> 
-** THIs 
 <ul>
 <li>default styles</li>
 <li>added hint(markup)</li>
