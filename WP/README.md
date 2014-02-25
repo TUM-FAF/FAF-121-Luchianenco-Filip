@@ -9,7 +9,7 @@
 **GitHub nickname:** [luchfilip](https://github.com/luchfilip)
 
 
-### Installation of required gtkmm packages
+### Installing required gtkmm packages
 
 In my Laboratory works I use gtkmm, here is how you can install the dependencies in order to be able to compile the projects
 
