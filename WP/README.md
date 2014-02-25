@@ -20,7 +20,7 @@ In addition to that, because both the GTK+ and gtkmm are free software distribut
 The Following packages are required to be installed in Ubuntu 13.10: 
 
 ```no-highlight
-sudo apt get install libglib2.0-dev libatk1.0* libatk1.0* libpango1.0-dev libcairo2-dev gdk-pixbuf2.0-0 libsigc++-2.0-dev libgtk-3-dev libcairomm-1.0-dev libpangomm-1.4-dev libatkmm-1.6-dev libgtkmm-3.0-dev
+sudo apt-get install libgtkmm-3.0-dev
 ```
 
 The following command in terminal will compile a project:
