@@ -1,4 +1,3 @@
-
   <div id="readme" class="blob instapaper_body">
     <article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1>
 <a name="laboratory-1-login-application" class="anchor" href="#laboratory-1-login-application"><span class="octicon octicon-link"></span></a>Laboratory #1: Login Application</h1>
@@ -24,7 +23,6 @@
 </li>
 <li>
 <b>Added 2 text elements to window:</b> 
-
 <ul>
 <li>default styles</li>
 <li>added hint(markup)</li>
@@ -75,6 +73,21 @@
 
 <p><a href="https://github-camo.global.ssl.fastly.net/fc263c490509a5dad805f888264ac7a166f37a09/68747470733a2f2f646c2e64726f70626f7875736572636f6e74656e742e636f6d2f752f3130343537333536362f53637265656e73686f7425323066726f6d253230323031342d30322d31362532303230253341323825334131332e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/fc263c490509a5dad805f888264ac7a166f37a09/68747470733a2f2f646c2e64726f70626f7875736572636f6e74656e742e636f6d2f752f3130343537333536362f53637265656e73686f7425323066726f6d253230323031342d30322d31362532303230253341323825334131332e706e67" alt="alt text" title="No Clicked" data-canonical-src="https://dl.dropboxusercontent.com/u/104573566/Screenshot%20from%202014-02-16%2020%3A28%3A13.png" style="max-width:100%;"></a></p>
 
+
+### Conclusion
+In this laboratory work I familiarized myself with basics of programming windowed applications. I created a simple application in C++ with the help of GTK, also some custom elements inside main window like buttons, labels and text inputs. Besides these custom dialogs are present. All these elements were implemented programatically, so that i understand better how everything works from the inside. 
+
+For me most parts were straightforward, as gtkmm has a very useful and complete documentation together with examples;  besides this I informed myself well enough to be able to start working on this laboratory work.
+#### Difficulties
+  * adding custom background to the main window.
+  * override close and minimize default buttons
+  * as far as i understood, gtkmm does not let custom styles for buttons to be written programatically. There are two not very elegant workarounds for this:
+    1. Create label, set it's background as button, and implement a signal_click (visually it would look and act like a button) 
+    2. Import custom styles from a CSS file which will contain all button's properties 
+
+    
+
+
 <h4>
 <a name="bibliography" class="anchor" href="#bibliography"><span class="octicon octicon-link"></span></a>Bibliography</h4>
 
@@ -83,8 +96,23 @@
 <li><a href="http://stackoverflow.com/">http://stackoverflow.com/</a></li>
 <li><a href="http://blog.mpshouse.com/">http://blog.mpshouse.com/</a></li>
 </ul><h3>
-<a name="legal-compliance" class="anchor" href="#legal-compliance"><span class="octicon octicon-link"></span></a>Legal compliance</h3>
 
+
+<h4>
+<a name="Compiling" class="anchor" href="#compiling"><span class="octicon octicon-link"></span></a>Compiling The Project</h4>
+<p>The Program can be compiled by executing the following commands in terminal: &nbsp; </p>
+
+
+    g++ mywindow.cpp mywindow.h main.cpp -o lab1 `pkg-config gtkmm-3.0 --cflags --libs`
+    ./lab1 
+
+
+
+
+
+----------------------------------------------  End Of File -----------------------------------------------
+
+<a name="legal-compliance" class="anchor" href="#legal-compliance"><span class="octicon octicon-link"></span></a>Legal compliance</h3>
 <p>Copyright (c) 2014, LuchFilip
 All rights reserved.</p>
 

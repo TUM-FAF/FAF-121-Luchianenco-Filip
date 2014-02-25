@@ -1,3 +1,10 @@
-Windows Programming laboratories repository
+## Windows Programming Laboratories Repository
 
-Student: Luchianeno Filip FAF-121
+### Personal Information
+
+**Student:** Luchianenco Filip
+
+**Group:** FAF-121
+
+**GitHub nickname:** [luchfilip](https://github.com/luchfilip)
+
