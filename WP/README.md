@@ -11,7 +11,7 @@
 
 ### Installing required gtkmm packages
 
-In my Laboratory works I use gtkmm, here is how you can install the dependencies in order to be able to compile the projects
+In my Laboratory works I use gtkmm, here is a short introduction about gtkmm and how you can install the dependencies in order to be able to compile the projects
 
 gtkmm is the official C++ interface for the GUI library GTK+. Highlights include typesafe callbacks, and a comprehensive set of widgets that are easily extensible via inheritance.
 
