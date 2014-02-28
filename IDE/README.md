@@ -1,4 +1,4 @@
-## Windows Programming Laboratories Repository
+## IDE Laboratories Repository
 
 ### Personal Information
 
