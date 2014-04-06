@@ -7,11 +7,16 @@ MyWindow::MyWindow()
   d_Box(Gtk::ORIENTATION_VERTICAL),
   h1_Box(Gtk::ORIENTATION_HORIZONTAL),
   h2_Box(Gtk::ORIENTATION_HORIZONTAL),
-  h3_Box(Gtk::ORIENTATION_HORIZONTAL)
+  h3_Box(Gtk::ORIENTATION_HORIZONTAL),
+
+  m_adjustment( Gtk::Adjustment::create(0, 0, 100, 1, 1)),
+  m_HScale(m_adjustment, Gtk::ORIENTATION_HORIZONTAL)
 {
   set_title("TODO List");
-  set_default_size(600, 400);
- // set_position(Gtk::WIN_POS_CENTER_ALWAYS);
+  set_default_size(800, 400);
+  //set_position center is bugged.
+  //see details here: https://www.youtube.com/watch?v=UDSV1Q7-5R4
+  //set_position(Gtk::WIN_POS_CENTER_ALWAYS);
 
   // put a MenuBar at the top of the box and other stuff below it.
   add(m_Box);
@@ -41,16 +46,13 @@ MyWindow::MyWindow()
 
   //Edit menu:
   m_refActionGroup->add(Gtk::Action::create("EditMenu", "Edit"));
-  m_refActionGroup->add(Gtk::Action::create("EditCopy", Gtk::Stock::COPY),
-          sigc::mem_fun(*this, &MyWindow::on_menu_others));
-  m_refActionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
-          sigc::mem_fun(*this, &MyWindow::on_menu_others));
-  m_refActionGroup->add(Gtk::Action::create("EditSomething", "Something"),
-          Gtk::AccelKey("<control>S"),
-          sigc::mem_fun(*this, &MyWindow::on_menu_others));
+  m_refActionGroup->add(Gtk::Action::create("EditCopy", "Copy", "Ctrl+C"));
+  m_refActionGroup->add(Gtk::Action::create("EditPaste", "Paste", "Ctrl+V"));
+  m_refActionGroup->add(Gtk::Action::create("EditSomething", "Add Entry"),
+          Gtk::AccelKey("<control>S"), sigc::mem_fun(*this, &MyWindow::on_addEntry_clicked));
 
 
-  //Choices menu, to demonstrate Radio items
+  //Choices menu for Radio items
   m_refActionGroup->add( Gtk::Action::create("ChoicesMenu", "Choices") );
   Gtk::RadioAction::Group group_userlevel;
   m_refChoiceOne = Gtk::RadioAction::create(group_userlevel, "ChoiceOne", "One");
@@ -63,7 +65,7 @@ MyWindow::MyWindow()
   //Help menu:
   m_refActionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
   m_refActionGroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::HELP),
-          sigc::mem_fun(*this, &MyWindow::on_menu_others) );
+          sigc::mem_fun(*this, &MyWindow::on_help_clicked) );
 
   m_refUIManager = Gtk::UIManager::create();
   m_refUIManager->insert_action_group(m_refActionGroup);
@@ -123,82 +125,96 @@ MyWindow::MyWindow()
     // Add the box which will contain all window elements below menu
     m_Box.add(d_Box);
 
+
+/*  //initially it was supposed to be a text between menu and entry. Later it was removed
     d_Box.add(h1_Box);
-
     h1_Box.set_vexpand(false);
-
     topText->set_text("Make you own TODO List");
     h1_Box.pack_start(*topText, true, true, 5);
+*/
+    //add h2_Box to main box
+    d_Box.add(h2_Box);
+    h2_Box.set_vexpand(false);
 
-    todo_entry->set_max_length(50);
+   //set and add entry to box
     todo_entry->set_text("add Items");
     set_focus_child(*todo_entry);
     todo_entry->set_text(todo_entry->get_text() + " to TODO List");
     todo_entry->select_region(0, todo_entry->get_text_length());
-
-    d_Box.add(h2_Box);
-    h2_Box.set_vexpand(false);
+    todo_entry->signal_changed().connect(sigc::mem_fun(*this, &MyWindow::on_text_changed));
     h2_Box.pack_start(*todo_entry, true, true, 5);
 
-    b_add->signal_clicked().connect(sigc::mem_fun(*this, &MyWindow::on_addEntry_clicked));
+    //add scrollbar percentage
+    m_HScale.set_digits(1);
+    m_HScale.set_value_pos(Gtk::POS_TOP);
+    m_HScale.set_draw_value();
+    m_HScale.set_digits(0);
+    h2_Box.pack_start(m_HScale, true, true, 5);
 
+    //add Entry button
+    b_add->signal_clicked().connect(sigc::mem_fun(*this, &MyWindow::on_addEntry_clicked));
     h2_Box.pack_start(*b_add, false, true, 5);
 
-    //Add the TreeView, inside a ScrolledWindow, with the button underneath:
+    Glib::ustring someTask = "some task";
+    //add Button which saves editing
+    b_saveEdit->signal_clicked().connect(sigc::mem_fun(*this, &MyWindow::onSaveEdit_clicked));
+    b_saveEdit->set_sensitive(false);
+    h2_Box.pack_start(*b_saveEdit, false, true, 5);
+
+    b_delete->signal_clicked().connect(sigc::mem_fun(*this, &MyWindow::on_delete_clicked));
+    b_delete->set_sensitive(false);
+    h2_Box.pack_start(*b_delete, false, true, 5);
+
+    //Add the TreeView, inside a ScrolledWindow:
   m_ScrolledWindow.add(m_TreeView);
 
   //Only show the scrollbars when they are necessary:
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
       //Create the Tree model:
-  m_refTreeModel = Gtk::ListStore::create(m_Columns);
-  m_TreeView.set_model(m_refTreeModel);
+    m_refTreeModel = Gtk::ListStore::create(m_Columns);
 
-  //Create the Tree model:
-  m_refTreeModel = Gtk::ListStore::create(m_Columns);
-  m_TreeView.set_model(m_refTreeModel);
+    m_TreeView.set_model(m_refTreeModel);
+
 
   //Fill the TreeView's model
-  Gtk::TreeModel::Row row = *(m_refTreeModel->append());
+  row = *(m_refTreeModel->append());
   row[m_Columns.m_col_id] = 1;
-  row[m_Columns.m_col_name] = "Billy Bob";
-  row[m_Columns.m_col_number] = 10;
   row[m_Columns.m_col_percentage] = 15;
+  row[m_Columns.m_col_name] = "Buy milk";
 
   row = *(m_refTreeModel->append());
   row[m_Columns.m_col_id] = 2;
-  row[m_Columns.m_col_name] = "Joey Jojo";
-  row[m_Columns.m_col_number] = 20;
   row[m_Columns.m_col_percentage] = 40;
+  row[m_Columns.m_col_name] = "Do Laboratory #2 &#3 on WP";
 
   row = *(m_refTreeModel->append());
   row[m_Columns.m_col_id] = 3;
-  row[m_Columns.m_col_name] = "Rob McRoberts";
-  row[m_Columns.m_col_number] = 30;
   row[m_Columns.m_col_percentage] = 70;
+  row[m_Columns.m_col_name] = "Do other laboratory Works";
 
+    //set selection listener on list
+    m_refTreeSelection = m_TreeView.get_selection();
+    m_refTreeSelection->signal_changed().connect( sigc::mem_fun(*this, &MyWindow::on_selection_changed));
+  //set counter for rows
+  count = 3;
   //Add the TreeView's view columns:
   //This number will be shown with the default numeric formatting.
   m_TreeView.append_column("ID", m_Columns.m_col_id);
-  m_TreeView.append_column("Name", m_Columns.m_col_name);
-
-  m_TreeView.append_column_numeric("Formatted number", m_Columns.m_col_number,
-          "%010d" /* 10 digits, using leading zeroes. */);
 
   //Display a progress bar instead of a decimal number:
   Gtk::CellRendererProgress* cell = Gtk::manage(new Gtk::CellRendererProgress);
-  int cols_count = m_TreeView.append_column("Some percentage", *cell);
-  Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+  int cols_count = m_TreeView.append_column("Task Completed", *cell);
+  pColumn = m_TreeView.get_column(cols_count - 1);
   if(pColumn)
   {
     pColumn->add_attribute(cell->property_value(), m_Columns.m_col_percentage);
   }
 
+  m_TreeView.append_column("Task Description", m_Columns.m_col_name);
+
   //Make all the columns reorderable:
-  //This is not necessary, but it's nice to show the feature.
-  //You can use TreeView::set_column_drag_function() to more
-  //finely control column drag and drop.
-  for(guint i = 0; i < 2; i++)
+  for(guint i = 0; i <= 2; i++)
   {
     Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
     pColumn->set_reorderable();
@@ -206,10 +222,7 @@ MyWindow::MyWindow()
 
     d_Box.add(h3_Box);
 
-
-
     h3_Box.set_vexpand(true);
-    //h2_Box.set_hexpand(true);
 
   h3_Box.pack_start(m_ScrolledWindow, true, true, 5);
 
@@ -221,13 +234,25 @@ MyWindow::~MyWindow()
 }
 
 void MyWindow::on_addEntry_clicked() {
+    count++;
+
+    row = *(m_refTreeModel->append());
+    row[m_Columns.m_col_id] = count;
+    row[m_Columns.m_col_name] = todo_entry->get_text();
+    row[m_Columns.m_col_percentage] = m_HScale.get_value();
+}
+
+void MyWindow::add_entry(Glib::ustring task, int percentage)
+{
+  std::cout << task << std::endl;
+    std::cout << percentage << std::endl;
 
 }
 
 void MyWindow::on_menu_file_quit()
 {
              //Gtk::MESSAGE_ERROR
-         Gtk::MessageDialog quitDialog("Are you sure you want to quit",
+         Gtk::MessageDialog quitDialog("Are you sure you want to Quit?",
                                         false,
                                         Gtk::MESSAGE_ERROR,
                                         Gtk::BUTTONS_YES_NO,
@@ -239,6 +264,7 @@ void MyWindow::on_menu_file_quit()
             // default YES response id
             case(yes_response):
                 hide();
+
                 break;
             // default NO response id
             case(no_response):
@@ -246,7 +272,6 @@ void MyWindow::on_menu_file_quit()
                 quitDialog.hide();
                 break;
             }
-  //hide(); //Closes the main window to stop the app->run().
 }
 
 void MyWindow::on_menu_file_new_generic()
@@ -279,6 +304,72 @@ void MyWindow::on_menu_choices_two()
     message = "Choice 2 was deselected";
 
   std::cout << message << std::endl;
+}
+
+void MyWindow::on_selection_changed()
+{
+    any_row_selected = true;
+
+    b_saveEdit->set_sensitive(true);
+    b_delete->set_sensitive(true);
+
+    Gtk::TreeModel::iterator iter = m_refTreeSelection->get_selected();
+    Gtk::TreeModel::Row row = *iter;
+    //get data from selected row
+    Glib::ustring task_string = row.get_value(m_Columns.m_col_name);
+    int selected_percentage = row.get_value(m_Columns.m_col_percentage);
+    unsigned int selected_id = row.get_value(m_Columns.m_col_id);
+
+    todo_entry->set_text(task_string);
+    double scale_value = (double) selected_percentage;
+    m_HScale.set_value(scale_value);
+
+
+std::cout << selected_id << std::endl;
+}
+
+void MyWindow::onSaveEdit_clicked()
+{
+    b_saveEdit->set_sensitive(false);
+
+    Gtk::TreeModel::iterator iter = m_refTreeSelection->get_selected();
+    Gtk::TreeModel::Row row = *iter;
+
+    Glib::ustring new_entry = todo_entry->get_text();
+    row.set_value(m_Columns.m_col_name, new_entry);
+    int new_percentage = m_HScale.get_value();
+    row.set_value(m_Columns.m_col_percentage, new_percentage);
+
+ std::cout << new_percentage << std::endl;
+}
+
+void MyWindow::on_delete_clicked()
+{
+    Gtk::TreeModel::iterator store_iter = m_refTreeSelection->get_selected();
+    m_refTreeModel->erase(store_iter);
+
+
+}
+
+void MyWindow::on_text_changed()
+{
+    bool is_button_active = b_saveEdit->get_sensitive();
+
+    if(any_row_selected && !is_button_active) {
+        b_saveEdit->set_sensitive(true);
+    }
+
+     std::cout << "text has changed" << std::endl;
+
+}
+
+void MyWindow::on_help_clicked()
+{
+    Gtk::MessageDialog dlg("Help", false,
+            Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+    dlg.set_title("Help Dialog");
+    dlg.set_secondary_text("Add items to your TODO list by writing the task in the entry box, and then press Ctrl+S or button Add. ");
+    dlg.run();
 }
 
 
