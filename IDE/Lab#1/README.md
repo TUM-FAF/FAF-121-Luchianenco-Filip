@@ -219,7 +219,11 @@ I also wrote a post in my blog on how to set up ssh server on virtualBox step by
 Link: http://luchfilip.wordpress.com/2014/02/25/setup-virtualbox-ssh-linux-server/
 
 
-###
+### Conclusion
+
+This Laboratory Work seemed to be extremelly simple for me at the beginning, but when I started to follow all tasks, I understood a lot of little important details which every programmer has to know by default. I found some difficulties in formatting the README.md file and outputting it to a nice looking pdf. 
+
+Shortly, it was fun to follow the give tasks, and I regret for not starting to do this Laboratory work earlier, so that I could complete 100% of the tasks. 
 
 
 ### References
