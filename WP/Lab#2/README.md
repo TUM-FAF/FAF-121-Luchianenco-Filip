@@ -42,6 +42,12 @@ Scrollbars appear when items do not fit inside the window
 
 ![scrollbars](http://i.imgur.com/fjiF6dp.png)
 
+### Add icon to application
+
+There is a icon in the top left corner, as well as in the bottom dock.
+
+![icon](http://i.imgur.com/XiGebdL.png)
+
 #### Additional Features
 
 There are more features which could not be shown in screenshots, so here is a video:

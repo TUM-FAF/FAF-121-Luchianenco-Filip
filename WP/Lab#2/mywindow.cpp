@@ -15,6 +15,7 @@ MyWindow::MyWindow()
   set_title("TODO List");
   set_default_size(800, 400);
   set_icon_from_file(iconpath);
+
   //set_position center is bugged.
   //see details here: https://www.youtube.com/watch?v=UDSV1Q7-5R4
   //set_position(Gtk::WIN_POS_CENTER_ALWAYS);
