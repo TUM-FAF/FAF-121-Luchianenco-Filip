@@ -1,4 +1,4 @@
-### Laboratory Work #2 Still in progress...
+### Laboratory Work #2 on Windows Programming
 
 
 ## Mandatory Objectives
