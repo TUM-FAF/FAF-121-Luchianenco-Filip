@@ -39,6 +39,7 @@ protected:
   void on_selection_changed();
   void on_delete_clicked();
   void on_text_changed();
+  void on_scale_changed();
 
   //Tree model columns:
   class ModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -67,6 +68,8 @@ protected:
   Gtk::EventBox event_box;
   Gtk::Label m_Label;
   Gtk::Scale m_HScale;
+  Gdk::Pixbuf *pixmap;
+  std::string iconpath="icon.png";
 
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;

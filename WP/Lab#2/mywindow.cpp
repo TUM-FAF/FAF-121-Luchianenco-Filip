@@ -14,6 +14,7 @@ MyWindow::MyWindow()
 {
   set_title("TODO List");
   set_default_size(800, 400);
+  set_icon_from_file(iconpath);
   //set_position center is bugged.
   //see details here: https://www.youtube.com/watch?v=UDSV1Q7-5R4
   //set_position(Gtk::WIN_POS_CENTER_ALWAYS);
@@ -149,6 +150,7 @@ MyWindow::MyWindow()
     m_HScale.set_value_pos(Gtk::POS_TOP);
     m_HScale.set_draw_value();
     m_HScale.set_digits(0);
+    m_HScale.signal_value_changed().connect(sigc::mem_fun(*this, &MyWindow::on_scale_changed));
     h2_Box.pack_start(m_HScale, true, true, 5);
 
     //add Entry button
@@ -347,8 +349,6 @@ void MyWindow::on_delete_clicked()
 {
     Gtk::TreeModel::iterator store_iter = m_refTreeSelection->get_selected();
     m_refTreeModel->erase(store_iter);
-
-
 }
 
 void MyWindow::on_text_changed()
@@ -360,7 +360,15 @@ void MyWindow::on_text_changed()
     }
 
      std::cout << "text has changed" << std::endl;
+}
 
+void MyWindow::on_scale_changed()
+{
+    bool is_button_active = b_saveEdit->get_sensitive();
+
+    if(any_row_selected && !is_button_active) {
+    b_saveEdit->set_sensitive(true);
+    }
 }
 
 void MyWindow::on_help_clicked()
